@@ -26,7 +26,7 @@ inf_int::inf_int(int n) {
 		count++; 
 	}
 
-	//ÀÔ·ÂÀÌ 0ÀÏ¶§ 
+	//ï¿½Ô·ï¿½ï¿½ï¿½ 0ï¿½Ï¶ï¿½ 
 	if (count == 0)
 	{
 		digits += '0';
@@ -168,19 +168,109 @@ inf_int operator-(const inf_int& a, const inf_int& b) {
 	}
 	else
 	{
+		
 		if (a.thesign == true)
 		{
-
+			c = b;
+			while (c.length < a.length)
+			{
+				c.digits += '0';
+				c.length++;
+			}
+			c.digits += '0';
+			c.length++; 
+			for (int i = 0; i <c.length-1; i++)
+			{
+				if (c.digits[i] != '0')
+				{
+					c.digits[i] = char(106-c.digits[i]);
+					c.add('1',i+2);
+				}
+			}
+			c.digits[c.length-1] ='0'; 
+			for (int i = 0; i < a.length; i++)
+			{
+				c.add(a.digits[i],i+1);
+			}
+			if (c.digits[c.length-1] == 1)
+			{
+				c.thesign = true;
+				c.digits.pop_back();
+				c.length--;
+				return c; 
+			}else{
+				for (int i = 0; i < c.length-1; i++)
+				{
+					if (c.digits[i] != '0')
+					{
+						c.digits[i] = char(106-c.digits[i]);
+						c.add('1',i+2);
+					}
+					c.digits.pop_back();
+					c.length--;
+					c.thesign =false; 
+					return c; 
+				}
+			}
 		}
 		else {
-
+			c = a;
+			while (c.length < b.length)
+			{
+				c.digits += '0';
+				c.length++;
+			}
+			c.digits += '0';
+			c.length++; 
+			for (int i = 0; i <c.length-1; i++)
+			{
+				if (c.digits[i] != '0')
+				{
+					c.digits[i] = char(106-c.digits[i]);
+					c.add('1',i+2);
+				}
+			}
+			c.digits[c.length-1] ='0'; 
+			for (int i = 0; i < b.length; i++)
+			{
+				c.add(b.digits[i],i+1);
+			}
+			if (c.digits[c.length-1] == 1)
+			{
+				c.thesign = true;
+				c.digits.pop_back();
+				c.length--;
+				return c; 
+			}else{
+				for (int i = 0; i < c.length-1; i++)
+				{
+					if (c.digits[i] != '0')
+					{
+						c.digits[i] = char(106-c.digits[i]);
+						c.add('1',i+2);
+					}
+					c.digits.pop_back();
+					c.length--;
+					c.thesign =false; 
+					return c; 
+				}
+			}
 		}
 	}
 }
+/*
 inf_int operator*(const inf_int& a, const inf_int& b) {
 
-}
+}*/
 
-ostream& operator<<(ostream&, const inf_int&) {
-
+ostream& operator<<(ostream& out, const inf_int& a) {
+	if (a.thesign == false)
+	{
+		out << '-';
+	}
+	for (int i = 0; i <a.length; i++)
+	{
+		out <<a.digits[i];
+	}
+	return out;
 }
