@@ -44,7 +44,7 @@ inf_int::inf_int(const string str) {
 	if (str[0] == '-')
 	{
 		thesign = false;
-		for (int i = 1; i < str.length() ; i++)
+		for (int i = str.length() - 1; i >0; i--)
 		{
 			digits += str[i];
 		}
@@ -52,7 +52,7 @@ inf_int::inf_int(const string str) {
 	}
 	else {
 		thesign = true;
-		for (int i = 0; i < str.length(); i++)
+		for (int i = str.length()-1; i >= 0; i--)
 		{
 			digits += str[i];
 		}
@@ -76,6 +76,8 @@ inf_int& inf_int :: operator=(const inf_int& a) {
 	this->digits = a.digits;
 	this->length = a.length; 
 	this->thesign = a.thesign; 
+
+	return *this;
 }
 
 
@@ -140,13 +142,16 @@ inf_int operator+(const inf_int& a, const inf_int& b) {
 	{
 		for (int i = 0; i < a.length; i++)
 		{
+			
 			c.add(a.digits[i],i+1);
 		}
 		for (int i = 0; i < b.length; i++)
 		{
+		
 			c.add(b.digits[i], i + 1);
 		}
 		c.thesign = a.thesign; 
+		
 		return c; 
 	}
 	else
@@ -168,7 +173,6 @@ inf_int operator-(const inf_int& a, const inf_int& b) {
 	}
 	else
 	{
-		
 		if (a.thesign == true)
 		{
 			c = b;
@@ -187,30 +191,48 @@ inf_int operator-(const inf_int& a, const inf_int& b) {
 					c.add('1',i+2);
 				}
 			}
+			
 			c.digits[c.length-1] ='0'; 
 			for (int i = 0; i < a.length; i++)
 			{
 				c.add(a.digits[i],i+1);
 			}
-			if (c.digits[c.length-1] == 1)
+			
+			
+			if (c.digits[c.length-1] == '1')
 			{
-				c.thesign = true;
 				c.digits.pop_back();
 				c.length--;
+				while (c.digits[c.length-1] == '0')
+				{
+					c.digits.pop_back();
+					c.length--;
+				}
+				c.thesign = true;
 				return c; 
 			}else{
+				
 				for (int i = 0; i < c.length-1; i++)
 				{
 					if (c.digits[i] != '0')
 					{
+						
 						c.digits[i] = char(106-c.digits[i]);
 						c.add('1',i+2);
 					}
+					
+				}
+				c.digits.pop_back();
+				c.length--;
+				
+				while (c.digits[c.length - 1] == '0')
+				{
 					c.digits.pop_back();
 					c.length--;
-					c.thesign =false; 
-					return c; 
+
 				}
+				c.thesign = false;
+				return c;
 			}
 		}
 		else {
@@ -221,56 +243,95 @@ inf_int operator-(const inf_int& a, const inf_int& b) {
 				c.length++;
 			}
 			c.digits += '0';
-			c.length++; 
-			for (int i = 0; i <c.length-1; i++)
+			c.length++;
+			for (int i = 0; i < c.length - 1; i++)
 			{
 				if (c.digits[i] != '0')
 				{
-					c.digits[i] = char(106-c.digits[i]);
-					c.add('1',i+2);
+					c.digits[i] = char(106 - c.digits[i]);
+					c.add('1', i + 2);
 				}
 			}
-			c.digits[c.length-1] ='0'; 
+
+			c.digits[c.length - 1] = '0';
 			for (int i = 0; i < b.length; i++)
 			{
-				c.add(b.digits[i],i+1);
+				c.add(b.digits[i], i + 1);
 			}
-			if (c.digits[c.length-1] == 1)
+
+
+			if (c.digits[c.length - 1] == '1')
 			{
-				c.thesign = true;
 				c.digits.pop_back();
 				c.length--;
-				return c; 
-			}else{
-				for (int i = 0; i < c.length-1; i++)
+				while (c.digits[c.length - 1] == '0')
+				{
+					c.digits.pop_back();
+					c.length--;
+				}
+				c.thesign = true;
+				return c;
+			}
+			else {
+
+				for (int i = 0; i < c.length - 1; i++)
 				{
 					if (c.digits[i] != '0')
 					{
-						c.digits[i] = char(106-c.digits[i]);
-						c.add('1',i+2);
+
+						c.digits[i] = char(106 - c.digits[i]);
+						c.add('1', i + 2);
 					}
+
+				}
+				c.digits.pop_back();
+				c.length--;
+
+				while (c.digits[c.length - 1] == '0')
+				{
 					c.digits.pop_back();
 					c.length--;
-					c.thesign =false; 
-					return c; 
+
 				}
+				c.thesign = false;
+				return c;
 			}
 		}
 	}
 }
-/*
-inf_int operator*(const inf_int& a, const inf_int& b) {
 
-}*/
+inf_int operator*(const inf_int& a, const inf_int& b) {
+	inf_int c; 
+
+	for (int i = 0; i < b.length; i++)
+	{
+		int count = b.digits[i] -48;
+		for (int k = 0; k < count; k++)
+		{
+			for (int j = 0; j < a.length; j++)
+			{
+				c.add(a.digits[j], j + 1+i);
+			}
+		}
+	}
+
+	if (a.thesign != b.thesign)
+	{
+		c.thesign = false;
+	}
+	else c.thesign = true; 
+	
+	return c; 
+}
 
 ostream& operator<<(ostream& out, const inf_int& a) {
 	if (a.thesign == false)
 	{
 		out << '-';
 	}
-	for (int i = 0; i <a.length; i++)
+	for (int i = a.length-1; i >=0; i--)
 	{
-		out <<a.digits[i];
+		out << a.digits[i];
 	}
 	return out;
 }

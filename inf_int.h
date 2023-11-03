@@ -16,14 +16,14 @@ private:
             digits.append("0");
             length++;
         }
-        if (digits[pos-1]+num-96 >= 10)
+        if (int(digits[pos-1])+int(num)-96 >= 10)
         {
-            digits[pos - 1] = char(digits[pos - 1] + num - 96 - 10);
+            digits[pos - 1] = char(int(digits[pos - 1]) + int(num) - 48 - 10);
             this->add('1', pos + 1);
         }
         else
         {
-            digits[pos - 1] = char(digits[pos - 1] + num - 96);
+            digits[pos - 1] = char(int(digits[pos - 1]) + int(num) - 48);
         }
     }
     void sub(char num,int pos){
@@ -42,10 +42,6 @@ public:
 
     inf_int& operator=(const inf_int& a); // assignment operator
 
-    void testPrint() {
-        cout << digits; 
-    }
-
     friend bool operator==(const inf_int& a, const inf_int& b);
     friend bool operator!=(const inf_int& a, const inf_int& b);
     friend bool operator>(const inf_int& a, const inf_int& b);
@@ -54,8 +50,8 @@ public:
     friend inf_int operator+(const inf_int& a, const inf_int& b);
     
     friend inf_int operator-(const inf_int& a, const inf_int& b);
-    /*
-    friend inf_int operator*(const inf_int& a, const inf_int& b);*/
+    
+    friend inf_int operator*(const inf_int& a, const inf_int& b);
     // friend inf_int operator/(const inf_int& , const inf_int&); // not required
 
     friend ostream& operator<<(ostream& out, const inf_int& a);
